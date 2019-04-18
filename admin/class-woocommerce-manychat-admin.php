@@ -151,7 +151,7 @@ class woocommerce_manychat_Admin {
 
         add_settings_field(
             $this->option_name . '_integration',
-            __( 'Sendinblue URL', 'woocommerce-manychat' ),
+            __( 'Manychat JS', 'woocommerce-manychat' ),
             array( $this, $this->option_name . '_integration_ta' ),
             $this->plugin_name,
             $this->option_name . '_general',
@@ -159,19 +159,19 @@ class woocommerce_manychat_Admin {
         );
 
         add_settings_field(
-            $this->option_name . '_form_prefix',
+            $this->option_name . '_api_key',
             __( 'Form prefix', 'woocommerce-manychat' ),
-            array( $this, $this->option_name . '_form_prefix_cb' ),
+            array( $this, $this->option_name . '_api_key_cb' ),
             $this->plugin_name,
             $this->option_name . '_general',
-            array( 'label_for' => $this->option_name . '_form_prefix' )
+            array( 'label_for' => $this->option_name . '_api_key' )
         );
 
 
 
 
         register_setting( $this->plugin_name, $this->option_name . '_integration');
-        register_setting( $this->plugin_name, $this->option_name . '_form_prefix');
+        register_setting( $this->plugin_name, $this->option_name . '_api_key');
 
     }
 
@@ -198,9 +198,10 @@ class woocommerce_manychat_Admin {
         echo '<textarea rows="4" cols="60" name="' . $this->option_name . '_integration' . '" id="' . $this->option_name . '_integration' . '">' . $embed . '</textarea>
             <p>Put here the integration code of Manychat (if you didn\'t embed it somewhere else)</p> ' . __( '', 'woocommerce-manychat' );
     }
-    public function woocommerce_manychat_form_prefix_cb() {
-        $form_prefix = get_option( $this->option_name . '_form_prefix' );
-        echo '<input size="60" type="text" name="' . $this->option_name . '_form_prefix' . '" id="' . $this->option_name . '_form_prefix' . '" value="' . $form_prefix . '"> <p>Forms with this prefix in the name will be sent to Sendinblue</p> ' . __( '', 'woocommerce-manychat' );
+    public function woocommerce_manychat_api_key_cb() {
+        $form_prefix = get_option( $this->option_name . '_api_key' );
+        echo '<input size="60" type="text" name="' . $this->option_name . '_api_key' . '" id="' . $this->option_name . '_api_key' . '" value="' . $form_prefix . '">
+            <p>The API key of Manychat</p> ' . __( '', 'woocommerce-manychat' );
     }
 
 
