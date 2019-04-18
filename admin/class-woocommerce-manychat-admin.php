@@ -160,11 +160,20 @@ class woocommerce_manychat_Admin {
 
         add_settings_field(
             $this->option_name . '_api_key',
-            __( 'Form prefix', 'woocommerce-manychat' ),
-            array( $this, $this->option_name . '_api_key_cb' ),
+            __( 'API key', 'woocommerce-manychat' ),
+            array( $this, $this->option_name . '_api_key_txt' ),
             $this->plugin_name,
             $this->option_name . '_general',
             array( 'label_for' => $this->option_name . '_api_key' )
+        );
+
+        add_settings_field(
+            $this->option_name . '_mc_id_variable',
+            __( 'Manychat ID var', 'woocommerce-manychat' ),
+            array( $this, $this->option_name . '_mc_id_variable_txt' ),
+            $this->plugin_name,
+            $this->option_name . '_general',
+            array( 'label_for' => $this->option_name . '_mc_id_variable' )
         );
 
 
@@ -172,6 +181,7 @@ class woocommerce_manychat_Admin {
 
         register_setting( $this->plugin_name, $this->option_name . '_integration');
         register_setting( $this->plugin_name, $this->option_name . '_api_key');
+        register_setting( $this->plugin_name, $this->option_name . '_mc_id_variable');
 
     }
 
@@ -198,10 +208,15 @@ class woocommerce_manychat_Admin {
         echo '<textarea rows="4" cols="60" name="' . $this->option_name . '_integration' . '" id="' . $this->option_name . '_integration' . '">' . $embed . '</textarea>
             <p>Put here the integration code of Manychat (if you didn\'t embed it somewhere else)</p> ' . __( '', 'woocommerce-manychat' );
     }
-    public function woocommerce_manychat_api_key_cb() {
+    public function woocommerce_manychat_api_key_txt() {
         $form_prefix = get_option( $this->option_name . '_api_key' );
         echo '<input size="60" type="text" name="' . $this->option_name . '_api_key' . '" id="' . $this->option_name . '_api_key' . '" value="' . $form_prefix . '">
             <p>The API key of Manychat</p> ' . __( '', 'woocommerce-manychat' );
+    }
+    public function woocommerce_manychat_mc_id_variable_txt() {
+        $mc_id_var = get_option( $this->option_name . '_mc_id_variable' );
+        echo '<input size="60" type="text" name="' . $this->option_name . '_mc_id_variable' . '" id="' . $this->option_name . '_mc_id_variable' . '" value="' . $mc_id_var . '">
+            <p>The GET variable that may contain the Manychat Subsciber ID</p> ' . __( '', 'woocommerce-manychat' );
     }
 
 

@@ -119,4 +119,14 @@ class woocommerce_manychat_Public {
         echo($script);
     }
 
+    /**
+    * Tries to get a Manychat ID. It tries hard.
+    *
+    * @since    1.0.0
+    */
+    public function the_id_getter( $record ) {
+        $the_var = get_option($this->option_name . '_mc_id_variable');
+        echo("ID GETTER:".$the_var);
+    }
+
 }
