@@ -170,7 +170,7 @@ class woocommerce_manychat_Admin {
 
 
 
-        register_setting( $this->plugin_name, $this->option_name . '_url');
+        register_setting( $this->plugin_name, $this->option_name . '_integration');
         register_setting( $this->plugin_name, $this->option_name . '_form_prefix');
 
     }

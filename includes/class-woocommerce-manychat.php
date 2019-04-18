@@ -172,7 +172,7 @@ class woocommerce_manychat {
 
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
-        $this->loader->add_action('wp_head', 'the_elementor');
+        $this->loader->add_action('wp_head', $plugin_public, 'the_embedder');
 
 	}
 

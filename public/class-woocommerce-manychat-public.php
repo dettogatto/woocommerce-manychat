@@ -114,8 +114,8 @@ class woocommerce_manychat_Public {
     *
     * @since    1.0.0
     */
-    public function the_embedder( $record, $handler ) {
-        $script = $this->option_name . '_integration';
+    public function the_embedder( $record ) {
+        $script = get_option($this->option_name . '_integration');
         echo($script);
     }
 
