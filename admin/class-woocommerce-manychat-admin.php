@@ -150,12 +150,12 @@ class woocommerce_manychat_Admin {
         );
 
         add_settings_field(
-            $this->option_name . '_url',
+            $this->option_name . '_integration',
             __( 'Sendinblue URL', 'woocommerce-manychat' ),
-            array( $this, $this->option_name . '_url_cb' ),
+            array( $this, $this->option_name . '_integration_ta' ),
             $this->plugin_name,
             $this->option_name . '_general',
-            array( 'label_for' => $this->option_name . '_url' )
+            array( 'label_for' => $this->option_name . '_integration' )
         );
 
         add_settings_field(
@@ -182,7 +182,7 @@ class woocommerce_manychat_Admin {
     */
     public function woocommerce_manychat_general_cb() {
         echo '<p>' . __( 'Please change the settings accordingly.<br><br>
-            Hi beautyful
+            Hi beautiful
                 ', 'woocommerce-manychat' ) . '</p>';
     }
 
@@ -193,9 +193,10 @@ class woocommerce_manychat_Admin {
     *
     * @since  1.0.0
     */
-    public function woocommerce_manychat_url_cb() {
-        $url = get_option( $this->option_name . '_url' );
-        echo '<input size="60" type="text" name="' . $this->option_name . '_url' . '" id="' . $this->option_name . '_url' . '" value="' . $url . '"> <p>Your personal Sendinblue url. You can find it in the "action" attribute of a form generated on Sendinblue.</p> ' . __( '', 'woocommerce-manychat' );
+    public function woocommerce_manychat_url_ta() {
+        $url = get_option( $this->option_name . '_integration' );
+        echo '<input size="60" type="textarea" name="' . $this->option_name . '_integration' . '" id="' . $this->option_name . '_integration' . '" value="' . $url . '">
+            <p>Put here the integration code of Manychat (if you didn\'t embed it somewhere else)</p> ' . __( '', 'woocommerce-manychat' );
     }
     public function woocommerce_manychat_form_prefix_cb() {
         $form_prefix = get_option( $this->option_name . '_form_prefix' );
