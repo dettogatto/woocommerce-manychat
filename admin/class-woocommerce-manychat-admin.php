@@ -195,7 +195,7 @@ class woocommerce_manychat_Admin {
     */
     public function woocommerce_manychat_integration_ta() {
         $embed = get_option( $this->option_name . '_integration' );
-        echo '<textarea name="' . $this->option_name . '_integration' . '" id="' . $this->option_name . '_integration' . '">' . $embed . '</textarea>
+        echo '<textarea rows="4" cols="60" name="' . $this->option_name . '_integration' . '" id="' . $this->option_name . '_integration' . '">' . $embed . '</textarea>
             <p>Put here the integration code of Manychat (if you didn\'t embed it somewhere else)</p> ' . __( '', 'woocommerce-manychat' );
     }
     public function woocommerce_manychat_form_prefix_cb() {

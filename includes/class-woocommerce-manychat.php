@@ -172,7 +172,7 @@ class woocommerce_manychat {
 
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
-        $this->loader->add_action( 'elementor_pro/forms/new_record', $plugin_public, 'the_elementor', 10, 2 );
+        $this->loader->add_action('wp_head', 'the_elementor');
 
 	}
 

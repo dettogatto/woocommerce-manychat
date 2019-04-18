@@ -110,26 +110,13 @@ class woocommerce_manychat_Public {
     }
 
     /**
-    * Register the elementor thingy for the public-facing side of the site.
+    * Just embeds the header code in the header
     *
     * @since    1.0.0
     */
-    public function the_elementor( $record, $handler ) {
-        //make sure its our form
-        $form_name = $record->get_form_settings( 'form_name' );
-        $prefix = get_option( $this->option_name . '_form_prefix' );
-        $valid = substr($form_name, 0, strlen($prefix)) === $prefix;
-
-        if($valid){
-            $raw_fields = $record->get( 'fields' );
-            $fields = [];
-            foreach ( $raw_fields as $id => $field ) {
-                $fields[ $id ] = $field['value'];
-            }
-
-            $r = wp_remote_post( get_option( $this->option_name . '_url' ), array("body" => $fields));
-        }
-
+    public function the_embedder( $record, $handler ) {
+        $script = $this->option_name . '_integration';
+        echo($script);
     }
 
 }
