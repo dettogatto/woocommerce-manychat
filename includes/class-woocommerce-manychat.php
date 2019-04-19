@@ -174,7 +174,8 @@ class woocommerce_manychat {
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
         $this->loader->add_action('wp_head', $plugin_public, 'the_embedder');
         $this->loader->add_action('wp_head', $plugin_public, 'the_id_getter');
-        $this->loader->add_action('wp_head', $plugin_public, 'the_cart_updater');
+        //$this->loader->add_action('wp_head', $plugin_public, 'the_cart_updater');
+        $this->loader->add_action('woocommerce_add_to_cart', $plugin_public, 'on_add_to_cart');
 
 	}
 

@@ -25,7 +25,6 @@ class woocommerce_manychat_Public {
     /**
     * The ID of this plugin.
     *
-    * @since    1.0.0
     * @access   private
     * @var      string    $plugin_name    The ID of this plugin.
     */
@@ -34,7 +33,6 @@ class woocommerce_manychat_Public {
     /**
     * The version of this plugin.
     *
-    * @since    1.0.0
     * @access   private
     * @var      string    $version    The current version of this plugin.
     */
@@ -43,16 +41,22 @@ class woocommerce_manychat_Public {
     /**
     * The options name to be used in this plugin
     *
-    * @since  	1.0.0
     * @access 	private
     * @var  	string 		$option_name 	Option name of this plugin
     */
     private $option_name = 'woocommerce_manychat';
 
     /**
+    * used for memoization
+    *
+    * @access 	private
+    * @var  	array
+    */
+    private $usrinfo = NULL;
+
+    /**
     * Initialize the class and set its properties.
     *
-    * @since    1.0.0
     * @param      string    $plugin_name       The name of the plugin.
     * @param      string    $version    The version of this plugin.
     */
@@ -65,8 +69,6 @@ class woocommerce_manychat_Public {
 
     /**
     * Register the stylesheets for the public-facing side of the site.
-    *
-    * @since    1.0.0
     */
     public function enqueue_styles() {
 
@@ -88,8 +90,6 @@ class woocommerce_manychat_Public {
 
     /**
     * Register the stylesheets for the public-facing side of the site.
-    *
-    * @since    1.0.0
     */
     public function enqueue_scripts() {
 
@@ -109,23 +109,41 @@ class woocommerce_manychat_Public {
 
     }
 
+
+    /**
+    * Gives a tag to the current User on Manychat
+    */
+    private function set_tag( $name ) {
+        $response = wp_remote_post( 'https://api.manychat.com/fb/subscriber/addTagByName', array(
+            'body' => array(
+                "subscriber_id" => $_COOKIE["mc_id"],
+                "tag_name" => $name,
+            ),
+            'headers' => array(
+                'accept' => 'application/json',
+                'Authorization' => 'Bearer ' . get_option($this->option_name . '_api_key')
+            )
+        ));
+        if($response && $response["body"]){
+            $res_body = json_decode($response["body"]);
+            var_dump($res_body);
+            return ($res_body->status == "success");
+        }
+        return false;
+    }
+
     /**
     * Sets custom field values on Manychat
-    *
-    * @since    1.0.0
     */
     private function set_customfield( $field, $value ) {
-        $usrid = isset($_COOKIE("mc_id")) ? $_COOKIE("mc_id") : NULL;
-        if(!$usrid){return false;}
         $response = wp_remote_post( 'https://api.manychat.com/fb/subscriber/setCustomFieldByName', array(
             'body' => array(
-                "subscriber_id" => $usrid,
+                "subscriber_id" => $_COOKIE["mc_id"],
                 "field_name" => $field,
                 "field_value" => $value
             ),
             'headers' => array(
                 'accept' => 'application/json',
-                'Content-Type' => 'application/json',
                 'Authorization' => 'Bearer ' . get_option($this->option_name . '_api_key')
             )
         ));
@@ -137,9 +155,58 @@ class woocommerce_manychat_Public {
     }
 
     /**
+    * Gets user info from Manychat
+    */
+    private function get_userinfo() {
+        if($this->usrinfo){
+            return $this->usrinfo;
+        }
+        $response = wp_remote_get( 'https://api.manychat.com/fb/subscriber/getInfo?subscriber_id='.$_COOKIE["mc_id"], array(
+            'headers' => array(
+                'accept' => 'application/json',
+                'Authorization' => 'Bearer ' . get_option($this->option_name . '_api_key')
+            )
+        ));
+        if($response && $response["body"]){
+            $res_body = json_decode($response["body"]);
+            if($res_body->status == "success"){
+                $this->usrinfo = $res_body;
+                return $res_body;
+            }
+        }
+        return false;
+    }
+
+    /**
+    * Gets user custom field value from Manychat
+    */
+    private function get_customfield( $name ) {
+        $info = $this->get_userinfo();
+        if(!$info){return false;}
+        $fields = $info->data->custom_fields;
+        foreach($fields as $k => $v){
+            if($v->name == $name){
+                return $v->value;
+            }
+        }
+    }
+
+    /**
+    * Gets user tags from Manychat as an array
+    */
+    private function get_tags() {
+        $info = $this->get_userinfo();
+        if(!$info){return false;}
+        $tags = $info->data->tags;
+        $res = array();
+        foreach($tags as $k => $v){
+            $res[] = $v->name;
+        }
+        return $res;
+    }
+
+    /**
     * Just embeds the header code in the header
-    *
-    * @since    1.0.0
     */
     public function the_embedder( $record ) {
         $script = get_option($this->option_name . '_integration');
@@ -148,8 +215,6 @@ class woocommerce_manychat_Public {
 
     /**
     * Tries to get a Manychat ID. It tries hard.
-    *
-    * @since    1.0.0
     */
     public function the_id_getter( $record ) {
         $the_var = get_option($this->option_name . '_mc_id_variable');
@@ -190,12 +255,14 @@ class woocommerce_manychat_Public {
 
     /**
     * Updates the cart list on Manychat
-    *
-    * @since    1.0.0
     */
-    public function the_cart_updater( $record ) {
-        $res = $this->set_customfield("prova", "woooo!");
-        echo($res ? "FATTO BENE!" : "FATTO MALE!");
+    public function on_add_to_cart( $record ) {
+        $this->set_tag("AZIONE: Aggiunta al carrello");
     }
+
+
+
+
+
 
 }
