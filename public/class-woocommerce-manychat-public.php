@@ -209,11 +209,8 @@ class woocommerce_manychat_Public {
     * Just embeds the header code in the header
     */
     public function the_embedder( $record ) {
-        global $woocommerce;
         $script = get_option($this->option_name . '_integration');
         echo($script);
-        $tot_price = floatval( preg_replace( '#[^\d]#', '', $woocommerce->cart->get_cart_total() ) );
-        echo($tot_price);
     }
 
     /**
