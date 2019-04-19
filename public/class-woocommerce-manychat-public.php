@@ -136,17 +136,18 @@ class woocommerce_manychat_Public {
     */
     private function set_customfield( $field, $value ) {
         $response = wp_remote_post( 'https://api.manychat.com/fb/subscriber/setCustomFieldByName', array(
-            'body' => array(
+            'body' => json_encode(array(
                 "subscriber_id" => $_COOKIE["mc_id"],
                 "field_name" => $field,
                 "field_value" => $value
-            ),
+            )),
             'headers' => array(
                 'accept' => 'application/json',
+                'Content-Type' => 'application/json',
                 'Authorization' => 'Bearer ' . get_option($this->option_name . '_api_key')
             )
         ));
-        if($response && $response["body"]){
+        if($response && is_array($response) && $response["body"]){
             $res_body = json_decode($response["body"]);
             return ($res_body->status == "success");
         }
@@ -208,8 +209,11 @@ class woocommerce_manychat_Public {
     * Just embeds the header code in the header
     */
     public function the_embedder( $record ) {
+        global $woocommerce;
         $script = get_option($this->option_name . '_integration');
         echo($script);
+        $tot_price = floatval( preg_replace( '#[^\d]#', '', $woocommerce->cart->get_cart_total() ) );
+        echo($tot_price);
     }
 
     /**
@@ -235,7 +239,7 @@ class woocommerce_manychat_Public {
                         'Authorization' => 'Bearer ' . get_option($this->option_name . '_api_key')
                     )
                 ));
-                if($response && $response["body"]){
+                if($response && is_array($response) && $response["body"]){
                     $res_body = json_decode($response["body"]);
                     if($res_body->status == "success"){
                         ?>
@@ -271,10 +275,20 @@ class woocommerce_manychat_Public {
             $_product = $values['data']->post;
             $res[] = $values['quantity'] . " x " . $_product->post_title;
         }
+        $tot_price = floatval( preg_replace( '#[^\d]#', '', $woocommerce->cart->get_cart_total() ) )/100;
         $this->set_customfield("prodotti carrello", implode("\n", $res));
+        $this->set_customfield("valore carrello", $tot_price);
         return true;
     }
 
+
+    /**
+    * Sets tag on order complete
+    */
+    public function on_order_complete( $record ) {
+        $this->set_tag("AZIONE: Acquisto");
+        return true;
+    }
 
 
 
