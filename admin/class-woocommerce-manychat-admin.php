@@ -176,12 +176,25 @@ class woocommerce_manychat_Admin {
             array( 'label_for' => $this->option_name . '_mc_id_variable' )
         );
 
-
-
-
         register_setting( $this->plugin_name, $this->option_name . '_integration');
         register_setting( $this->plugin_name, $this->option_name . '_api_key');
         register_setting( $this->plugin_name, $this->option_name . '_mc_id_variable');
+
+        add_settings_section(
+            $this->option_name . '_mc_tags',
+            __( 'Tags', 'woocommerce-manychat' ),
+            array( $this, $this->option_name . '_tags_cb' ),
+            $this->plugin_name
+        );
+
+        add_settings_field(
+            $this->option_name . '_tag_add_to_cart',
+            __( 'On add to cart', 'woocommerce-manychat' ),
+            array( $this, $this->option_name . '_tag_add_to_cart_txt' ),
+            $this->plugin_name,
+            $this->option_name . '_mc_tags',
+            array( 'label_for' => $this->option_name . '_tag_add_to_cart' )
+        );
 
     }
 
@@ -217,6 +230,11 @@ class woocommerce_manychat_Admin {
         $mc_id_var = get_option( $this->option_name . '_mc_id_variable' );
         echo '<input size="60" type="text" name="' . $this->option_name . '_mc_id_variable' . '" id="' . $this->option_name . '_mc_id_variable' . '" value="' . $mc_id_var . '">
             <p>The URL GET variable that may contain the Manychat Subsciber ID</p> ' . __( '', 'woocommerce-manychat' );
+    }
+    public function woocommerce_manychat_tag_add_to_cart_txt() {
+        $tag_add_to_cart = get_option( $this->option_name . '_tag_add_to_cart' );
+        echo '<input size="60" type="text" name="' . $this->option_name . '_tag_add_to_cart' . '" id="' . $this->option_name . '_tag_add_to_cart' . '" value="' . $tag_add_to_cart . '">
+            <p>The tag to be added when user adds something to cart</p> ' . __( '', 'woocommerce-manychat' );
     }
 
 

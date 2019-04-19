@@ -282,7 +282,23 @@ class woocommerce_manychat_Public {
     /**
     * Sets tag on order complete
     */
-    public function on_order_complete( $record ) {
+    public function on_order_complete( $order_id ) {
+        global $woocommerce;
+        $order = wc_get_order( $order_id );
+        $res = array();
+        $items = $order->get_items();
+        foreach($items as $item => $values) {
+            //$_product = $values['data']->post;
+            $res[] = $values['quantity'] . " x " . $values->get_name();
+        }
+        $tot_price = floatval( preg_replace( '#[^\d]#', '', $order->get_total() ) )/100;
+
+        $ltv = floatval($this->get_customfield("STATO: ltv")) + $tot_price;
+
+        $this->set_customfield("acquisto", implode("\n", $res));
+        $this->set_customfield("STATO: ltv", $ltv);
+        $this->set_customfield("prodotti carrello", "NULL");
+        $this->set_customfield("valore carrello", 0);
         $this->set_tag("AZIONE: Acquisto");
         return true;
     }
