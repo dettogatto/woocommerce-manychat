@@ -126,7 +126,7 @@ class woocommerce_manychat_Public {
     */
     public function the_id_getter( $record ) {
         $the_var = get_option($this->option_name . '_mc_id_variable');
-        $url_var = (isset($_GET[$the_var]) && $_GET[$the_var] != "") ? $_GET[$the_var] : NULL;
+        $url_var = (isset($_GET[$the_var]) && $_GET[$the_var] != "") ? htmlspecialchars($_GET[$the_var]) : NULL;
         if($url_var){
             ?>
             <script>
@@ -137,6 +137,17 @@ class woocommerce_manychat_Public {
             </script>
             <?php
         }else{
+            if(isset($_COOKIE["mc_ref"] && $_COOKIE["mc_ref"] != ""){
+                $response = wp_remote_post( $url, array(
+                    'body'    => array(
+                        "user_ref" => $_COOKIE["mc_ref"]
+                    ),
+                    'headers' => array(
+                        'Authorization' => 'Bearer ' . get_option($this->option_name . '_api_key')
+                    )
+                ));
+                echo($response);
+            }
         }
     }
 

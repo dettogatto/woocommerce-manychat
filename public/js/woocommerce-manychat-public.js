@@ -37,7 +37,6 @@ function getCookie(cname) {
             let ref = window.MC.getWidget(list[i].widgetId).userRef;
             if(ref){
               setCookie("mc_ref", ref, 30);
-              alert("GOTCHA! " + ref);
               clearInterval(mcInterval);
               mcInterval = 0;
             }
