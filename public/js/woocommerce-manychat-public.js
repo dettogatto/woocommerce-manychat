@@ -1,32 +1,50 @@
 (function( $ ) {
-	'use strict';
+  'use strict';
 
-	/**
-	 * All of the code for your public-facing JavaScript source
-	 * should reside in this file.
-	 *
-	 * Note that this assume you're going to use jQuery, so it prepares
-	 * the $ function reference to be used within the scope of this
-	 * function.
-	 *
-	 * From here, you're able to define handlers for when the DOM is
-	 * ready:
-	 *
-	 * $(function() {
-	 *
-	 * });
-	 *
-	 * Or when the window is loaded:
-	 *
-	 * $( window ).load(function() {
-	 *
-	 * });
-	 *
-	 * ...and so on.
-	 *
-	 * Remember that ideally, we should not attach any more than a single DOM-ready or window-load handler
-	 * for any particular page. Though other scripts in WordPress core, other plugins, and other themes may
-	 * be doing this, we should try to minimize doing that in our own work.
-	 */
+  function setCookie(cname, cvalue, exdays) {
+    var d = new Date();
+    d.setTime(d.getTime() + (exdays*24*60*60*1000));
+    var expires = "expires="+ d.toUTCString();
+    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+  }
+
+  function getCookie(cname) {
+    var name = cname + "=";
+    var decodedCookie = decodeURIComponent(document.cookie);
+    var ca = decodedCookie.split(';');
+    for(var i = 0; i <ca.length; i++) {
+      var c = ca[i];
+      while (c.charAt(0) == ' ') {
+        c = c.substring(1);
+      }
+      if (c.indexOf(name) == 0) {
+        return c.substring(name.length, c.length);
+      }
+    }
+    return false;
+  }
+
+  var mcref = getCookie("mc_ref");
+  var mcid = getCookie("mc_id");
+  if((!mcid || mcid == "")&&(!mcref || mcref == "")){
+    $(document).ready(function(){
+      var mcInterval = setInterval(function(){
+        console.log("Looking for REF");
+        let list = window.MC.getWidgetList();
+        for(var i = 0; i < list.length; i++){
+          if(list[i].type == "checkbox"){
+            let ref = window.MC.getWidget(list[i].widgetId).userRef;
+            if(ref){
+              setCookie("mc_ref", ref, 30);
+              alert("GOTCHA! " + ref);
+              clearInterval(mcInterval);
+              mcInterval = 0;
+            }
+          }
+        }
+      }, 300);
+    });
+  }
+
 
 })( jQuery );

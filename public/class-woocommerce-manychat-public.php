@@ -130,33 +130,6 @@ class woocommerce_manychat_Public {
         if($url_var){
             setcookie("mc_id", $url_var, time()+(3600*24*365*2));
         }
-        ?>
-        <script>
-        function setCookie(cname, cvalue, exdays) {
-            var d = new Date();
-            d.setTime(d.getTime() + (exdays*24*60*60*1000));
-            var expires = "expires="+ d.toUTCString();
-            document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
-        }
-        document.addEventListener("DOMContentLoaded", function(){
-            var mcInterval = setInterval(function(){
-                console.log("Looking for REF");
-                let list = window.MC.getWidgetList();
-                for(var i = 0; i < list.length; i++){
-                    if(list[i].type == "checkbox"){
-                        let ref = window.MC.getWidget(list[i].widgetId).userRef;
-                        if(ref){
-                            setCookie("mc_ref", ref, 30);
-                            alert("GOTCHA! " + ref);
-                            clearInterval(mcInterval);
-                            mcInterval = 0;
-                        }
-                    }
-                }
-            }, 300);
-        });
-        </script>
-        <?php
     }
 
 }
