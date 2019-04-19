@@ -25,25 +25,21 @@ function getCookie(cname) {
 (function( $ ) {
   'use strict';
 
-  var mcref = getCookie("mc_ref");
-  var mcid = getCookie("mc_id");
-  if(!mcid || mcid == ""){
-    $(document).ready(function(){
-      var mcInterval = setInterval(function(){
-        let list = window.MC.getWidgetList();
-        for(var i = 0; i < list.length; i++){
-          if(list[i].type == "checkbox"){
-            let ref = window.MC.getWidget(list[i].widgetId).userRef;
-            if(ref){
-              setCookie("mc_ref", ref, 30);
-              clearInterval(mcInterval);
-              mcInterval = 0;
-            }
+  $(document).ready(function(){
+    var mcInterval = setInterval(function(){
+      let list = window.MC.getWidgetList();
+      for(var i = 0; i < list.length; i++){
+        if(list[i].type == "checkbox"){
+          let ref = window.MC.getWidget(list[i].widgetId).userRef;
+          if(ref){
+            setCookie("mc_ref", ref, 30);
+            clearInterval(mcInterval);
+            mcInterval = 0;
           }
         }
-      }, 300);
-    });
-  }
+      }
+    }, 300);
+  });
 
 
 })( jQuery );
