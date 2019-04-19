@@ -267,12 +267,10 @@ class woocommerce_manychat_Public {
         global $woocommerce;
         $res = array();
         $items = $woocommerce->cart->get_cart();
-
         foreach($items as $item => $values) {
-            $_product =  wc_get_product( $values['data']->get_id());
-            $res[] = $values['quantity']." x ".$_product->get_title();
+            $_product = $values['data']->post;
+            $res[] = $values['quantity'] . " x " . $_product->post_title;
         }
-
         $this->set_customfield("prodotti carrello", implode("\n", $res));
         return true;
     }
