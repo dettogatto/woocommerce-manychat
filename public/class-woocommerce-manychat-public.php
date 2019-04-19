@@ -126,7 +126,6 @@ class woocommerce_manychat_Public {
         ));
         if($response && $response["body"]){
             $res_body = json_decode($response["body"]);
-            var_dump($res_body);
             return ($res_body->status == "success");
         }
         return false;
@@ -258,11 +257,14 @@ class woocommerce_manychat_Public {
     */
     public function on_add_to_cart( $record ) {
         $this->set_tag("AZIONE: Aggiunta al carrello");
-        ?>
-        <script>
-        alert("taggg");
-        </script>
-        <?php
+        return true;
+    }
+
+    /**
+    * Updates the cart list on Manychat
+    */
+    public function on_cart_update( $record ) {
+        $this->set_customfield("prodotti carrello", "a\ncacca\nciao\n4");
         return true;
     }
 
