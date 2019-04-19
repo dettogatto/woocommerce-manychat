@@ -137,16 +137,23 @@ class woocommerce_manychat_Public {
             </script>
             <?php
         }else{
-            if(isset($_COOKIE["mc_ref"] && $_COOKIE["mc_ref"] != ""){
-                $response = wp_remote_post( $url, array(
-                    'body'    => array(
-                        "user_ref" => $_COOKIE["mc_ref"]
-                    ),
+            if(isset($_COOKIE["mc_ref"]) && $_COOKIE["mc_ref"] != ""){
+                $response = wp_remote_get( 'https://api.manychat.com/fb/subscriber/getInfoByUserRef?user_ref='.$_COOKIE["mc_ref"], array(
                     'headers' => array(
+                        'accept' => 'application/json',
                         'Authorization' => 'Bearer ' . get_option($this->option_name . '_api_key')
                     )
                 ));
-                echo($response);
+                if($response && $response["body"] && $response["body"]["status"] && $response["body"]["status"] == "success"){
+                    ?>
+                    <script>
+                    var d = new Date();
+                    d.setTime(d.getTime() + (365*2*24*60*60*1000));
+                    var expires = "expires="+ d.toUTCString();
+                    document.cookie = "mc_id=<?php echo($response["body"]["data"]["id"]); ?>;" + expires + ";path=/";
+                    </script>
+                    <?php
+                }
             }
         }
     }

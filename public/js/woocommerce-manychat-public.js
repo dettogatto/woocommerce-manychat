@@ -27,10 +27,9 @@ function getCookie(cname) {
 
   var mcref = getCookie("mc_ref");
   var mcid = getCookie("mc_id");
-  if((!mcid || mcid == "")&&(!mcref || mcref == "")){
+  if(!mcid || mcid == ""){
     $(document).ready(function(){
       var mcInterval = setInterval(function(){
-        console.log("Looking for REF");
         let list = window.MC.getWidgetList();
         for(var i = 0; i < list.length; i++){
           if(list[i].type == "checkbox"){
