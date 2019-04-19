@@ -183,7 +183,7 @@ class woocommerce_manychat_Admin {
         add_settings_section(
             $this->option_name . '_mc_tags',
             __( 'Tags', 'woocommerce-manychat' ),
-            array( $this, $this->option_name . '_tags_cb' ),
+            array( $this, $this->option_name . '_tags_section' ),
             $this->plugin_name
         );
 
@@ -195,6 +195,65 @@ class woocommerce_manychat_Admin {
             $this->option_name . '_mc_tags',
             array( 'label_for' => $this->option_name . '_tag_add_to_cart' )
         );
+        add_settings_field(
+            $this->option_name . '_tag_purchased',
+            __( 'On purchase', 'woocommerce-manychat' ),
+            array( $this, $this->option_name . '_tag_purchased_txt' ),
+            $this->plugin_name,
+            $this->option_name . '_mc_tags',
+            array( 'label_for' => $this->option_name . '_tag_purchased' )
+        );
+
+        register_setting( $this->plugin_name, $this->option_name . '_tag_add_to_cart');
+        register_setting( $this->plugin_name, $this->option_name . '_tag_purchased');
+
+        add_settings_section(
+            $this->option_name . '_mc_customfields',
+            __( 'Manychat Custom Fields', 'woocommerce-manychat' ),
+            array( $this, $this->option_name . '_customfields_section' ),
+            $this->plugin_name
+        );
+
+        add_settings_field(
+            $this->option_name . '_cf_ltv',
+            __( 'Life time value', 'woocommerce-manychat' ),
+            array( $this, $this->option_name . '_cf_ltv_txt' ),
+            $this->plugin_name,
+            $this->option_name . '_mc_customfields',
+            array( 'label_for' => $this->option_name . '_cf_ltv' )
+        );
+
+        add_settings_field(
+            $this->option_name . '_cf_cart_value',
+            __( 'Cart value', 'woocommerce-manychat' ),
+            array( $this, $this->option_name . '_cf_cart_value_txt' ),
+            $this->plugin_name,
+            $this->option_name . '_mc_customfields',
+            array( 'label_for' => $this->option_name . '_cf_cart_value' )
+        );
+
+        add_settings_field(
+            $this->option_name . '_cf_cart_list',
+            __( 'Cart list', 'woocommerce-manychat' ),
+            array( $this, $this->option_name . '_cf_cart_list_txt' ),
+            $this->plugin_name,
+            $this->option_name . '_mc_customfields',
+            array( 'label_for' => $this->option_name . '_cf_cart_list' )
+        );
+
+        add_settings_field(
+            $this->option_name . '_cf_purchase_list',
+            __( 'Last purchase list', 'woocommerce-manychat' ),
+            array( $this, $this->option_name . '_cf_purchase_list_txt' ),
+            $this->plugin_name,
+            $this->option_name . '_mc_customfields',
+            array( 'label_for' => $this->option_name . '_cf_purchase_list' )
+        );
+
+        register_setting( $this->plugin_name, $this->option_name . '_cf_ltv');
+        register_setting( $this->plugin_name, $this->option_name . '_cf_cart_value');
+        register_setting( $this->plugin_name, $this->option_name . '_cf_cart_list');
+        register_setting( $this->plugin_name, $this->option_name . '_cf_purchase_list');
 
     }
 
@@ -209,6 +268,13 @@ class woocommerce_manychat_Admin {
                 ', 'woocommerce-manychat' ) . '</p>';
     }
 
+    public function woocommerce_manychat_tags_section() {
+        echo '<p>' . __( 'Here you can define the tags names to be used', 'woocommerce-manychat' ) . '</p>';
+    }
+
+    public function woocommerce_manychat_customfields_section() {
+        echo '<p>' . __( 'Here you can define the custom fields names to be used', 'woocommerce-manychat' ) . '</p>';
+    }
 
 
     /**
@@ -235,6 +301,31 @@ class woocommerce_manychat_Admin {
         $tag_add_to_cart = get_option( $this->option_name . '_tag_add_to_cart' );
         echo '<input size="60" type="text" name="' . $this->option_name . '_tag_add_to_cart' . '" id="' . $this->option_name . '_tag_add_to_cart' . '" value="' . $tag_add_to_cart . '">
             <p>The tag to be added when user adds something to cart</p> ' . __( '', 'woocommerce-manychat' );
+    }
+    public function woocommerce_manychat_tag_purchased_txt() {
+        $tag_purchased = get_option( $this->option_name . '_tag_purchased' );
+        echo '<input size="60" type="text" name="' . $this->option_name . '_tag_purchased' . '" id="' . $this->option_name . '_tag_purchased' . '" value="' . $tag_purchased . '">
+            <p>The tag to be added when user checks out</p> ' . __( '', 'woocommerce-manychat' );
+    }
+    public function woocommerce_manychat_cf_ltv_txt() {
+        $cf = get_option( $this->option_name . '_cf_ltv' );
+        echo '<input size="60" type="text" name="' . $this->option_name . '_cf_ltv' . '" id="' . $this->option_name . '_cf_ltv' . '" value="' . $cf . '">
+            <p>The custom field where to store the Life Time Value (tot. purchases)</p> ' . __( '', 'woocommerce-manychat' );
+    }
+    public function woocommerce_manychat_cf_cart_value_txt() {
+        $cf = get_option( $this->option_name . '_cf_cart_value' );
+        echo '<input size="60" type="text" name="' . $this->option_name . '_cf_cart_value' . '" id="' . $this->option_name . '_cf_cart_value' . '" value="' . $cf . '">
+            <p>The custom field where to store the current Cart Value</p> ' . __( '', 'woocommerce-manychat' );
+    }
+    public function woocommerce_manychat_cf_cart_list_txt() {
+        $cf = get_option( $this->option_name . '_cf_cart_list' );
+        echo '<input size="60" type="text" name="' . $this->option_name . '_cf_cart_list' . '" id="' . $this->option_name . '_cf_cart_list' . '" value="' . $cf . '">
+            <p>The custom field where to store the list of cart items</p> ' . __( '', 'woocommerce-manychat' );
+    }
+    public function woocommerce_manychat_cf_purchase_list_txt() {
+        $cf = get_option( $this->option_name . '_cf_purchase_list' );
+        echo '<input size="60" type="text" name="' . $this->option_name . '_cf_purchase_list' . '" id="' . $this->option_name . '_cf_purchase_list' . '" value="' . $cf . '">
+            <p>The custom field where to store the list of last purchased items</p> ' . __( '', 'woocommerce-manychat' );
     }
 
 
