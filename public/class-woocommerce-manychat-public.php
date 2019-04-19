@@ -110,6 +110,33 @@ class woocommerce_manychat_Public {
     }
 
     /**
+    * Sets custom field values on Manychat
+    *
+    * @since    1.0.0
+    */
+    private function set_customfield( $field, $value ) {
+        $usrid = isset($_COOKIE("mc_id")) ? $_COOKIE("mc_id") : NULL;
+        if(!$usrid){return false;}
+        $response = wp_remote_post( 'https://api.manychat.com/fb/subscriber/setCustomFieldByName', array(
+            'body' => array(
+                "subscriber_id" => $usrid,
+                "field_name" => $field,
+                "field_value" => $value
+            ),
+            'headers' => array(
+                'accept' => 'application/json',
+                'Content-Type' => 'application/json',
+                'Authorization' => 'Bearer ' . get_option($this->option_name . '_api_key')
+            )
+        ));
+        if($response && $response["body"]){
+            $res_body = json_decode($response["body"]);
+            return ($res_body->status == "success");
+        }
+        return false;
+    }
+
+    /**
     * Just embeds the header code in the header
     *
     * @since    1.0.0
@@ -159,6 +186,16 @@ class woocommerce_manychat_Public {
                 }
             }
         }
+    }
+
+    /**
+    * Updates the cart list on Manychat
+    *
+    * @since    1.0.0
+    */
+    public function the_cart_updater( $record ) {
+        $res = $this->set_customfield("prova", "woooo!");
+        echo($res ? "FATTO BENE!" : "FATTO MALE!");
     }
 
 }
