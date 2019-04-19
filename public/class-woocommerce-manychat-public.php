@@ -144,15 +144,18 @@ class woocommerce_manychat_Public {
                         'Authorization' => 'Bearer ' . get_option($this->option_name . '_api_key')
                     )
                 ));
-                if($response && $response["body"] && $response["body"]["status"] && $response["body"]["status"] == "success"){
-                    ?>
-                    <script>
-                    var d = new Date();
-                    d.setTime(d.getTime() + (365*2*24*60*60*1000));
-                    var expires = "expires="+ d.toUTCString();
-                    document.cookie = "mc_id=<?php echo($response["body"]["data"]["id"]); ?>;" + expires + ";path=/";
-                    </script>
-                    <?php
+                if($response && $response["body"]){
+                    $res_body = json_decode($response["body"]);
+                    if($res_body->status == "success"){
+                        ?>
+                        <script>
+                        var d = new Date();
+                        d.setTime(d.getTime() + (365*2*24*60*60*1000));
+                        var expires = "expires="+ d.toUTCString();
+                        document.cookie = "mc_id=<?php echo($res_body->data->id); ?>;" + expires + ";path=/";
+                        </script>
+                        <?php
+                    }
                 }
             }
         }
