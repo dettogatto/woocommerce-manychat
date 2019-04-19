@@ -274,7 +274,12 @@ class woocommerce_manychat_Public {
         }
         $tot_price = floatval( preg_replace( '#[^\d]#', '', $woocommerce->cart->get_cart_total() ) )/100;
 
-        $this->set_customfield( get_option( $this->option_name . '_cf_cart_list' ), implode("\n", $res));
+        $list = implode("\n", $res);
+        if($list == ""){
+            $list = "NULL";
+        }
+
+        $this->set_customfield( get_option( $this->option_name . '_cf_cart_list' ), $list);
         $this->set_customfield( get_option( $this->option_name . '_cf_cart_value' ), $tot_price);
 
         return true;
