@@ -264,7 +264,16 @@ class woocommerce_manychat_Public {
     * Updates the cart list on Manychat
     */
     public function on_cart_update( $record ) {
-        $this->set_customfield("prodotti carrello", "a\ncacca\nciao\n4");
+        global $woocommerce;
+        $res = array();
+        $items = $woocommerce->cart->get_cart();
+
+        foreach($items as $item => $values) {
+            $_product =  wc_get_product( $values['data']->get_id());
+            $res[] = $values['quantity']." x ".$_product->get_title();
+        }
+
+        $this->set_customfield("prodotti carrello", implode("\n", $res));
         return true;
     }
 
