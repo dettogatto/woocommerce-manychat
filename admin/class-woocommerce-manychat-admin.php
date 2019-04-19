@@ -216,7 +216,7 @@ class woocommerce_manychat_Admin {
     public function woocommerce_manychat_mc_id_variable_txt() {
         $mc_id_var = get_option( $this->option_name . '_mc_id_variable' );
         echo '<input size="60" type="text" name="' . $this->option_name . '_mc_id_variable' . '" id="' . $this->option_name . '_mc_id_variable' . '" value="' . $mc_id_var . '">
-            <p>The GET variable that may contain the Manychat Subsciber ID</p> ' . __( '', 'woocommerce-manychat' );
+            <p>The URL GET variable that may contain the Manychat Subsciber ID</p> ' . __( '', 'woocommerce-manychat' );
     }
 
 
