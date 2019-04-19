@@ -130,7 +130,10 @@ class woocommerce_manychat_Public {
         if($url_var){
             ?>
             <script>
-            setCookie("mc_id", "<?php echo($url_var); ?>", 30);
+            var d = new Date();
+            d.setTime(d.getTime() + (365*2*24*60*60*1000));
+            var expires = "expires="+ d.toUTCString();
+            document.cookie = "mc_id=<?php echo($url_var); ?>;" + expires + ";path=/";
             </script>
             <?php
         }else{
