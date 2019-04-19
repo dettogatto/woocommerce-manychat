@@ -258,6 +258,7 @@ class woocommerce_manychat_Public {
     */
     public function on_add_to_cart( $record ) {
         $this->set_tag("AZIONE: Aggiunta al carrello");
+        return true;
     }
 
 
