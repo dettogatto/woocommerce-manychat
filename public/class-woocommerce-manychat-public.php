@@ -257,7 +257,7 @@ class woocommerce_manychat_Public {
     * Updates the cart list on Manychat
     */
     public function on_add_to_cart( $record ) {
-        $this->set_tag("AZIONE: Aggiunta al carrello");
+        $this->set_tag( get_option( $this->option_name . '_tag_add_to_cart' ) );
         return true;
     }
 
@@ -273,8 +273,10 @@ class woocommerce_manychat_Public {
             $res[] = $values['quantity'] . " x " . $_product->post_title;
         }
         $tot_price = floatval( preg_replace( '#[^\d]#', '', $woocommerce->cart->get_cart_total() ) )/100;
-        $this->set_customfield("prodotti carrello", implode("\n", $res));
-        $this->set_customfield("valore carrello", $tot_price);
+
+        $this->set_customfield( get_option( $this->option_name . '_cf_cart_list' ), implode("\n", $res));
+        $this->set_customfield( get_option( $this->option_name . '_cf_cart_value' ), $tot_price);
+
         return true;
     }
 
@@ -295,11 +297,11 @@ class woocommerce_manychat_Public {
 
         $ltv = floatval($this->get_customfield("STATO: ltv")) + $tot_price;
 
-        $this->set_customfield("acquisto", implode("\n", $res));
-        $this->set_customfield("STATO: ltv", $ltv);
-        $this->set_customfield("prodotti carrello", "NULL");
-        $this->set_customfield("valore carrello", 0);
-        $this->set_tag("AZIONE: Acquisto");
+        $this->set_customfield( get_option( $this->option_name . '_cf_purchase_list' ), implode("\n", $res));
+        $this->set_customfield( get_option( $this->option_name . '_cf_ltv' ), $ltv);
+        $this->set_customfield( get_option( $this->option_name . '_cf_cart_list' ), "NULL");
+        $this->set_customfield( get_option( $this->option_name . '_cf_cart_value' ), 0);
+        $this->set_tag( get_option( $this->option_name . '_tag_purchased' ) );
         return true;
     }
 
