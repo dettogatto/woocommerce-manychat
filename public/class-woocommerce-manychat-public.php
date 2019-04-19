@@ -128,7 +128,12 @@ class woocommerce_manychat_Public {
         $the_var = get_option($this->option_name . '_mc_id_variable');
         $url_var = (isset($_GET[$the_var]) && $_GET[$the_var] != "") ? $_GET[$the_var] : NULL;
         if($url_var){
-            setcookie("mc_id", $url_var, time()+(3600*24*365*2));
+            ?>
+            <script>
+            setCookie("mc_id", "<?php echo($url_var); ?>", 30);
+            </script>
+            <?php
+        }else{
         }
     }
 
