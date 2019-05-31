@@ -217,17 +217,12 @@ class woocommerce_manychat_Public {
     * Tries to get a Manychat ID. It tries hard.
     */
     public function the_id_getter( $record ) {
+        $got_it = false;
         $the_var = get_option($this->option_name . '_mc_id_variable');
         $url_var = (isset($_GET[$the_var]) && $_GET[$the_var] != "") ? htmlspecialchars($_GET[$the_var]) : NULL;
         if($url_var){
-            ?>
-            <script>
-            var d = new Date();
-            d.setTime(d.getTime() + (365*2*24*60*60*1000));
-            var expires = "expires="+ d.toUTCString();
-            document.cookie = "mc_id=<?php echo($url_var); ?>;" + expires + ";path=/";
-            </script>
-            <?php
+            setcookie("mc_id", $url_var, time() + (60*60*24*365*3));
+            $got_it = true;
         }else{
             if(isset($_COOKIE["mc_ref"]) && $_COOKIE["mc_ref"] != ""){
                 $response = wp_remote_get( 'https://api.manychat.com/fb/subscriber/getInfoByUserRef?user_ref='.$_COOKIE["mc_ref"], array(
@@ -239,17 +234,27 @@ class woocommerce_manychat_Public {
                 if($response && is_array($response) && $response["body"]){
                     $res_body = json_decode($response["body"]);
                     if($res_body->status == "success"){
-                        ?>
-                        <script>
-                        var d = new Date();
-                        d.setTime(d.getTime() + (365*2*24*60*60*1000));
-                        var expires = "expires="+ d.toUTCString();
-                        document.cookie = "mc_id=<?php echo($res_body->data->id); ?>;" + expires + ";path=/";
-                        </script>
-                        <?php
+                        setcookie("mc_id", $res_body->data->id, time() + (60*60*24*365*3));
+                        $got_it = true;
                     }
                 }
             }
+        }
+
+        if($got_it){
+            $this->just_got_the_id();
+        }
+    }
+
+    /**
+    * Check if fields must be updated when I first get the ID
+    */
+    public function just_got_the_id(){
+        global $woocommerce;
+        $items = $woocommerce->cart->get_cart();
+        if($items && !empty($items)){
+            $this->on_cart_update( NULL );
+            $this->on_add_to_cart( NULL );
         }
     }
 

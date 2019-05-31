@@ -9,14 +9,13 @@
  * that starts the plugin.
  *
  * @link              http://fsylum.net
- * @since             1.0.0
  * @package           woocommerce_manychat
  *
  * @wordpress-plugin
  * Plugin Name:       WooCommerce-Manychat
  * Plugin URI:        https://cosmo.cat
  * Description:       Integrate Manychat into your Woocommerce shop!
- * Version:           0.2.1
+ * Version:           0.3.0
  * Author:            Nicola Cavallazzi
  * Author URI:        http://cosmo.cat
  * License:           GPL-2.0+
