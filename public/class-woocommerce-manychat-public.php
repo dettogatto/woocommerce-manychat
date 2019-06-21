@@ -221,7 +221,14 @@ class woocommerce_manychat_Public {
         $the_var = get_option($this->option_name . '_mc_id_variable');
         $url_var = (isset($_GET[$the_var]) && $_GET[$the_var] != "") ? htmlspecialchars($_GET[$the_var]) : NULL;
         if($url_var){
-            setcookie("mc_id", $url_var, time() + (60*60*24*365*3));
+            ?>
+            <script>
+                var d = new Date();
+                d.setTime(d.getTime() + (365*2*24*60*60*1000));
+                var expires = "expires="+ d.toUTCString();
+                document.cookie = "mc_id=<?php echo($url_var); ?>;" + expires + ";path=/";
+            </script>
+            <?php
             $got_it = true;
         }else{
             if(isset($_COOKIE["mc_ref"]) && $_COOKIE["mc_ref"] != ""){
@@ -234,7 +241,14 @@ class woocommerce_manychat_Public {
                 if($response && is_array($response) && $response["body"]){
                     $res_body = json_decode($response["body"]);
                     if($res_body->status == "success"){
-                        setcookie("mc_id", $res_body->data->id, time() + (60*60*24*365*3));
+                        ?>
+                        <script>
+                            var d = new Date();
+                            d.setTime(d.getTime() + (365*2*24*60*60*1000));
+                            var expires = "expires="+ d.toUTCString();
+                            document.cookie = "mc_id=<?php echo($url_var); ?>;" + expires + ";path=/";
+                        </script>
+                        <?php
                         $got_it = true;
                     }
                 }

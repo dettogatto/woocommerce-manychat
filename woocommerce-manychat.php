@@ -15,7 +15,7 @@
  * Plugin Name:       WooCommerce-Manychat
  * Plugin URI:        https://cosmo.cat
  * Description:       Integrate Manychat into your Woocommerce shop!
- * Version:           0.3.0
+ * Version:           0.3.1
  * Author:            Nicola Cavallazzi
  * Author URI:        http://cosmo.cat
  * License:           GPL-2.0+
