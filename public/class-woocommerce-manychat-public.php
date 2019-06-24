@@ -3,8 +3,6 @@
 /**
 * The public-facing functionality of the plugin.
 *
-* @link       http://fsylum.net
-* @since      1.0.0
 *
 * @package    woocommerce_manychat
 * @subpackage woocommerce_manychat/public

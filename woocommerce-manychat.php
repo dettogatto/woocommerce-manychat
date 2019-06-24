@@ -8,14 +8,13 @@
  * registers the activation and deactivation functions, and defines a function
  * that starts the plugin.
  *
- * @link              http://fsylum.net
  * @package           woocommerce_manychat
  *
  * @wordpress-plugin
  * Plugin Name:       WooCommerce-Manychat
  * Plugin URI:        https://cosmo.cat
  * Description:       Integrate Manychat into your Woocommerce shop!
- * Version:           0.3.1
+ * Version:           0.3.2
  * Author:            Nicola Cavallazzi
  * Author URI:        http://cosmo.cat
  * License:           GPL-2.0+
@@ -31,7 +30,7 @@ if ( ! defined( 'WPINC' ) ) {
 
 require 'plugin-update-checker/plugin-update-checker.php';
 $myUpdateChecker = Puc_v4_Factory::buildUpdateChecker(
-	'https://github.com/NicolaCavallazzi/woocommerce-manychat/',
+	'https://github.com/dettogatto/woocommerce-manychat/',
 	__FILE__,
 	'woocommerce-manychat'
 );
